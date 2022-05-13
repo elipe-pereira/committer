@@ -21,18 +21,18 @@ Empacotamento:
     - test -d /tmp/"$package"/DEBIAN && rm -rf /tmp/"$package"
     - mkdir /tmp/$package
     - mkdir /tmp/"$package"/DEBIAN
-    - echo "Section:$section" > /tmp/"$package"/DEBIAN/control
-    - echo "Package:$package" > /tmp/"$package"/DEBIAN/control
-    - echo "Priority:$priority" > /tmp/"$package"/DEBIAN/control
-    - echo "Version:$version" > /tmp/"$package"/DEBIAN/control
-    - echo "Architecture:$architecture" > /tmp/"$package"/DEBIAN/control
-    - echo "Maintainer:$maintainer" > /tmp/"$package"/DEBIAN/control
-    - echo "Depends:$depends" > /tmp/"$package"/DEBIAN/control
-    - echo "Description:$description" > /tmp/"$package"/DEBIAN/control
-    - echo " " > /tmp/"$package"/DEBIAN/control
-    - echo "#!/bin/bash" > /tmp/"$package"/DEBIAN/postinst
+    - echo "Section:$section" >> /tmp/"$package"/DEBIAN/control
+    - echo "Package:$package" >> /tmp/"$package"/DEBIAN/control
+    - echo "Priority:$priority" >> /tmp/"$package"/DEBIAN/control
+    - echo "Version:$version" >> /tmp/"$package"/DEBIAN/control
+    - echo "Architecture:$architecture" >> /tmp/"$package"/DEBIAN/control
+    - echo "Maintainer:$maintainer" >> /tmp/"$package"/DEBIAN/control
+    - echo "Depends:$depends" >> /tmp/"$package"/DEBIAN/control
+    - echo "Description:$description" >> /tmp/"$package"/DEBIAN/control
+    - echo  >> /tmp/"$package"/DEBIAN/control
+    - echo "#!/bin/bash" >> /tmp/"$package"/DEBIAN/postinst
     - echo "test -h /usr/bin/committer || 
-      ln -s /usr/share/committer/committer.py /usr/bin/committer" > 
+      ln -s /usr/share/committer/committer.py /usr/bin/committer" >> 
       /tmp/"$package"/DEBIAN/postinst
     
     - mkdir -p /tmp/"$package"/usr/share/committer
