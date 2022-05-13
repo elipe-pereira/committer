@@ -29,6 +29,7 @@ Empacotamento:
     - echo "Maintainer:$maintainer" > /tmp/"$package"/DEBIAN/control
     - echo "Depends:$depends" > /tmp/"$package"/DEBIAN/control
     - echo "Description:$description" > /tmp/"$package"/DEBIAN/control
+    - echo " " > /tmp/"$package"/DEBIAN/control
     - echo "#!/bin/bash" > /tmp/"$package"/DEBIAN/postinst
     - echo "test -h /usr/bin/committer || 
       ln -s /usr/share/committer/committer.py /usr/bin/committer" > 
