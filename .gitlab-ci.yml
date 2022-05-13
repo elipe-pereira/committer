@@ -26,7 +26,7 @@ Empacotamento:
     - echo "Priority:$priority" > /tmp/"$package"/DEBIAN/control
     - echo "Version:$version" > /tmp/"$package"/DEBIAN/control
     - echo "Architecture:$architecture" > /tmp/"$package"/DEBIAN/control
-    - echo "Maintainer:$maintainer" > /tmp/"$package'/DEBIAN/control
+    - echo "Maintainer:$maintainer" > /tmp/"$package"/DEBIAN/control
     - echo "Depends:$depends" > /tmp/"$package"/DEBIAN/control
     - echo "Description:$description" > /tmp/"$package"/DEBIAN/control
     - echo "#!/bin/bash" > /tmp/"$package"/DEBIAN/postinst
@@ -38,3 +38,5 @@ Empacotamento:
     - cp -av * /tmp/"$package"/usr/share/committer
     - dpkg -b /tmp/"$package" /tmp
     - ssh $ssh_user@$server "reprepro -b $repo_path includedeb hanokh /tmp/$package_$version_$architecture.deb"
+rules:
+  - if: $CI_COMMIT_TAG
