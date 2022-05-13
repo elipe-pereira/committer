@@ -15,6 +15,10 @@ variables:
   maintainer: "Hanokh Software Labs"
   depends: "git, certbot"
   Description: "Acessa pastas configuradas e faz commit das mudanças automaticamente"
+  cmd_preinst: "#!/bin/bash
+  test -f /etc/committer/committer.conf \
+  && cp -av /etc/committer/committer.conf /tmp
+  "
 
 Empacotamento:
   stage: empacotamento
@@ -24,6 +28,7 @@ Empacotamento:
     - test -d /tmp/"$package"/DEBIAN && rm -rf /tmp/"$package"
     - mkdir /tmp/$package
     - mkdir /tmp/"$package"/DEBIAN
+
     - echo "Adicionando parametros essenciais ao arquivo control"
     - echo "Section:$section" >> /tmp/"$package"/DEBIAN/control
     - echo "Package:$package" >> /tmp/"$package"/DEBIAN/control
@@ -34,21 +39,33 @@ Empacotamento:
     - echo "Depends:$depends" >> /tmp/"$package"/DEBIAN/control
     - echo "Description:$description" >> /tmp/"$package"/DEBIAN/control
     - echo  >> /tmp/"$package"/DEBIAN/control
+    
+    - echo "Adicionado comandos ao arquivo preinst"
+    - echo "$cmd_preinst" >> /tmp/"$package"/DEBIAN/preinst
+    
     - echo "Adicionado comandos essenciais ao arquivos postinst"
     - echo "#!/bin/bash" >> /tmp/"$package"/DEBIAN/postinst
     - echo "test -h /usr/bin/committer || 
       ln -s /usr/share/committer/committer.py /usr/bin/committer" >> 
       /tmp/"$package"/DEBIAN/postinst
     
+    - echo "test -d /usr/share/committer &&
+      ln -s /usr/share/committer/etc/committer /etc/committer" >>
+      /tmp/"$package"/DEBIAN/postinst
+    
     - echo "Dando permissão de execução aos arquivos dentro da pasta DEBIAN"
     - chmod +x /tmp/"$package"/DEBIAN/*
+    
     - echo "Criando pasta e transferindo arquivos do repositório"
     - mkdir -p /tmp/"$package"/usr/share/committer
     - cp -av * /tmp/"$package"/usr/share/committer
+    
     - echo "Efetuando o empacotamento"
     - dpkg -b /tmp/"$package" /tmp
+    
     - echo "Enviando o arquivo empacotado para o repositório"
     - ssh $ssh_user@$server "reprepro -b $repo_path/$distro includedeb $release /tmp/'$package'_'$version'_'$architecture'.deb"
+    
     - echo "Limpando arquivos"
     - test -d /tmp/"$package"/DEBIAN & rm -rf /tmp/"$package"* 
   rules:
