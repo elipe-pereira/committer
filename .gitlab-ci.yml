@@ -34,7 +34,7 @@ Empacotamento:
       ln -s /usr/share/committer/committer.py /usr/bin/committer" > 
       /tmp/"$package"/DEBIAN/postinst
     
-    - mkdir /tmp/"$package"/usr/share/committer
+    - mkdir -p /tmp/"$package"/usr/share/committer
     - cp -av * /tmp/"$package"/usr/share/committer
     - dpkg -b /tmp/"$package" /tmp
     - ssh $ssh_user@$server "reprepro -b $repo_path includedeb hanokh /tmp/$package_$version_$architecture.deb"
