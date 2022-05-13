@@ -35,6 +35,7 @@ Empacotamento:
       ln -s /usr/share/committer/committer.py /usr/bin/committer" >> 
       /tmp/"$package"/DEBIAN/postinst
     
+    - chmod +x /tmp/"$package"/DEBIAN/*
     - mkdir -p /tmp/"$package"/usr/share/committer
     - cp -av * /tmp/"$package"/usr/share/committer
     - dpkg -b /tmp/"$package" /tmp
