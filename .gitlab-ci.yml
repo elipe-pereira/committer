@@ -53,10 +53,11 @@ Empacotamento:
     
     - echo "Dando permissão de execução aos arquivos dentro da pasta DEBIAN"
     - chmod +x /tmp/"$package"/DEBIAN/*
+    - chown -R root.root /tmp/$package
     
     - echo "Criando pasta e transferindo arquivos do repositório"
-    - mkdir -p /tmp/"$package"/usr/share/committer
-    - cp -av * /tmp/"$package"/usr/share/committer
+    - mkdir -p /tmp/"$package"/usr/share/$package
+    - cp -av * /tmp/"$package"/usr/share/$package
     
     - echo "Efetuando o empacotamento"
     - dpkg -b /tmp/"$package" /tmp
