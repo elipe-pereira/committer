@@ -16,7 +16,7 @@ variables:
   depends: "git, certbot"
   description: "Acessa pastas configuradas e faz commit das mudanças automaticamente"
   cmd_preinst: "#!/bin/bash
-  cp -av /etc/committer/committer.conf /tmp || echo 'Não há versão anterior instalada'
+  test -h /etc/committer && cp -av /etc/committer/committer.conf /tmp'
   "
 
 Empacotamento:
