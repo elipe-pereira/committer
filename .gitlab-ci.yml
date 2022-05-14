@@ -18,6 +18,12 @@ variables:
   cmd_preinst: "#!/bin/bash\n
   ! test -h /etc/committer || cp -av /etc/committer/committer.conf /tmp/committer.conf
   "
+  cmd_postinst: "#!/bin/bash\n
+  test -h /usr/bin/committer ||
+  ln -s /usr/share/committer/committer.py /usr/bin/committer \n
+  test -d /usr/share/committer && 
+  ln -s /usr/share/committer/etc/committer /etc/committer \n
+  "
 
 Empacotamento:
   stage: empacotamento
@@ -43,14 +49,7 @@ Empacotamento:
     - echo "$cmd_preinst" >> /tmp/"$package"/DEBIAN/preinst
     
     - echo "Adicionado comandos essenciais ao arquivos postinst"
-    - echo "#!/bin/bash" >> /tmp/"$package"/DEBIAN/postinst
-    - echo "test -h /usr/bin/committer || 
-      ln -s /usr/share/committer/committer.py /usr/bin/committer" >> 
-      /tmp/"$package"/DEBIAN/postinst
-    
-    - echo "test -d /usr/share/committer &&
-      ln -s /usr/share/committer/etc/committer /etc/committer" >>
-      /tmp/"$package"/DEBIAN/postinst
+    - echo "$cmd_postinst" >> /tmp/"$package"/DEBIAN/postinst
     
     - echo "Dando permissão de execução aos arquivos dentro da pasta DEBIAN"
     - chmod +x /tmp/"$package"/DEBIAN/*
