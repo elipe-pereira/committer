@@ -15,8 +15,7 @@ variables:
   maintainer: "Hanokh Software Labs"
   depends: "git, certbot"
   description: "Acessa pastas configuradas e faz commit das mudanças automaticamente"
-  cmd_preinst: "#!/bin/bash\n
-  test -h /etc/committer && cp -av /etc/committer/committer.conf /tmp
+  cmd_preinst: "#!/bin/bash\ntest -h /etc/committer && cp -av /etc/committer/committer.conf /tmp
   "
 
 Empacotamento:
