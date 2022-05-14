@@ -21,8 +21,7 @@ variables:
   cmd_postinst: "#!/bin/bash\n
   test -h /usr/bin/committer ||
   ln -s /usr/share/committer/committer.py /usr/bin/committer \n
-  ! test -h /etc/commiter && 
-  ln -s /usr/share/committer/etc/committer /etc/committer \n
+  test -h /etc/commiter  || ln -s /usr/share/committer/etc/committer /etc/committer \n
   ! test -f /tmp/committer.conf ||cp -av /tmp/committer.conf /etc/committer/committer.conf \n
   "
 
