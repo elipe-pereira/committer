@@ -58,6 +58,8 @@ Empacotamento:
     - echo "Criando pasta e transferindo arquivos do repositório"
     - mkdir -p /tmp/"$package"/usr/share/$package
     - cp -av * /tmp/"$package"/usr/share/$package
+    
+    - echo "Deixando o usuário root como dono dos arquivos"
     - ssh $ssh_user@$server "chown -R root.root /tmp/$package"
 
     - echo "Efetuando o empacotamento"
