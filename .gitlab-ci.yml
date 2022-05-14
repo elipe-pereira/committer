@@ -67,7 +67,7 @@ Empacotamento:
     - ssh $ssh_user@$server "reprepro -b $repo_path/$distro includedeb $release /tmp/'$package'_'$version'_'$architecture'.deb"
 
     - echo "Limpando arquivos"
-    - ssh $ssh_root@$server "test -d /tmp/$package/DEBIAN && rm -rf /tmp/$package*" 
+    - ssh $ssh_user@$server "test -d /tmp/$package/DEBIAN && rm -rf /tmp/$package*" 
     
  
   rules:
