@@ -16,7 +16,7 @@ variables:
   depends: "git, certbot"
   description: "Acessa pastas configuradas e faz commit das mudanças automaticamente"
   cmd_preinst: "#!/bin/bash
-  test -h /etc/committer && cp -av /etc/committer/committer.conf /tmp'
+  test -h /etc/committer && cp -av /etc/committer/committer.conf /tmp
   "
 
 Empacotamento:
@@ -66,7 +66,7 @@ Empacotamento:
     - ssh $ssh_user@$server "reprepro -b $repo_path/$distro includedeb $release /tmp/'$package'_'$version'_'$architecture'.deb"
     
     - echo "Limpando arquivos"
-    - test -d /tmp/"$package"/DEBIAN & rm -rf /tmp/"$package"* 
+    - #test -d /tmp/"$package"/DEBIAN & rm -rf /tmp/"$package"* 
  
   rules:
     - if: $CI_COMMIT_TAG
