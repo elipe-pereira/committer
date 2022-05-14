@@ -64,6 +64,9 @@ Empacotamento:
     
     - echo "Enviando o arquivo empacotado para o repositório"
     - ssh $ssh_user@$server "reprepro -b $repo_path/$distro includedeb $release /tmp/'$package'_'$version'_'$architecture'.deb"
+
+    - echo "Limpando arquivos"
+    - test -d /tmp/"$package"/DEBIAN && rm -rf /tmp/"$package"* 
     
  
   rules:
