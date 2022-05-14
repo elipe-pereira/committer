@@ -31,7 +31,7 @@ Empacotamento:
   script:
     - echo "Criando pasta DEBIAN"
     - ssh $ssh_user@$server "test -d /tmp/$package/DEBIAN && rm -rf /tmp/$package"
-    - mkdir /tmp/$package
+    - mkdir /tmp/"$package"
     - mkdir /tmp/"$package"/DEBIAN
 
     - echo "Adicionando parametros essenciais ao arquivo control"
