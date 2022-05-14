@@ -14,7 +14,7 @@ variables:
   architecture: amd64
   maintainer: "Hanokh Software Labs"
   depends: "git, certbot"
-  Description: "Acessa pastas configuradas e faz commit das mudanças automaticamente"
+  description: "Acessa pastas configuradas e faz commit das mudanças automaticamente"
   cmd_preinst: "#!/bin/bash
   test -f /etc/committer/committer.conf \
   && cp -av /etc/committer/committer.conf /tmp
