@@ -15,7 +15,7 @@ def main():
     config.read(config_dir + "/etc/committer/committer.conf")
     sections = config.sections()
 
-    if len(section) == 0:
+    if len(sections) == 0:
         print("Não Há seções configuradas")
         sys.exit()
     else:
