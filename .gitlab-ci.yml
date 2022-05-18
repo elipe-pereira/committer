@@ -5,7 +5,7 @@ variables:
   ssh_user: root
   server: valentino
   repo_path: /srv/repo
-  distro: ubuntu
+  distro: debian
   release: hanokh
   section: Misc
   package: committer
