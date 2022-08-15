@@ -1,76 +1,95 @@
+.package-default: &package-default
+  - echo "Criando pasta DEBIAN"
+  - ssh "$ssh_user"@"$server" "! test -d /tmp/$package/DEBIAN || rm -rf /tmp/$package"
+  - ssh "$ssh_user"@"$server" "mkdir /tmp/$package"
+  - ssh "$ssh_user"@"$server" "mkdir /tmp/$package/DEBIAN"
+
+  - echo "Adicionando parametros essenciais ao arquivo control"
+  - ssh "$ssh_user"@"$server" "echo Section:$section >> /tmp/$package/DEBIAN/control"
+  - ssh "$ssh_user"@"$server" "echo Package:$package >> /tmp/$package/DEBIAN/control"
+  - ssh "$ssh_user"@"$server" "echo Priority:$priority >> /tmp/$package/DEBIAN/control"
+  - ssh "$ssh_user"@"$server" "echo Version:$version >> /tmp/$package/DEBIAN/control"
+  - ssh "$ssh_user"@"$server" "echo Architecture:$architecture >> /tmp/$package/DEBIAN/control"
+  - ssh "$ssh_user"@"$server" "echo Maintainer:$maintainer >> /tmp/$package/DEBIAN/control"
+  - ssh "$ssh_user"@"$server" "echo Depends:$depends >> /tmp/$package/DEBIAN/control"
+  - ssh "$ssh_user"@"$server" "echo Description:$description >> /tmp/$package/DEBIAN/control"
+  - ssh "$ssh_user"@"$server" "echo  >> /tmp/$package/DEBIAN/control"
+  
+  - echo "Adicionado comandos ao arquivo preinst"
+  - ssh "$ssh_user"@"$server" "echo $cmd_preinst >> /tmp/$package/DEBIAN/preinst"
+  
+  - echo "Adicionado comandos essenciais ao arquivos postinst"
+  - ssh "$ssh_user"@"$server" "echo $cmd_postinst >> /tmp/$package/DEBIAN/postinst"
+  
+  - echo "Dando permissão de execução aos arquivos dentro da pasta DEBIAN"
+  - ssh "$ssh_user"@"$server" "chmod +x /tmp/$package/DEBIAN/*"
+ 
+  
+  - echo "Criando pasta e transferindo arquivos do repositório"
+  - ssh "$ssh_user"@"$server" "mkdir -p /tmp/$package/usr/share/$package"
+  - rsync -av --no-o --no-g * "$ssh_user"@"$server":/tmp/"$package"/usr/share/"$package"
+  
+  - echo "Deixando o usuário root como dono dos arquivos"
+  - ssh $ssh_user@$server "chown -R root.root /tmp/$package"
+
+  - echo "Efetuando o empacotamento"
+  - ssh "$ssh_user"@"$server" "dpkg -b /tmp/$package /tmp"
+  
+  - echo "Enviando o arquivo empacotado para o repositório"
+  - ssh "$ssh_user"@"$server" "reprepro -b $repo_path/$distro includedeb $release /tmp/'$package'_'$version'_'$architecture'.deb"
+
+  - echo "Limpando arquivos"
+  - ssh "$ssh_user"@"$server" "test -d /tmp/$package/DEBIAN && rm -rf /tmp/$package*" 
+
 stages:
-  - empacotamento
+  - testing-package
+  - release-package
 
 variables: 
   ssh_user: root
-  server: valentino
-  repo_path: /srv/repo
+  server: patolino
   distro: debian
   release: hanokh
   section: Misc
   package: committer
   priority: optional
-  version: $CI_COMMIT_TAG
-  architecture: amd64
+  architecture: all
   maintainer: "Hanokh Software Labs"
   depends: "git, certbot"
   description: "Acessa pastas configuradas e faz commit das mudanças automaticamente"
   cmd_preinst: "#!/bin/bash\n
-  ! test -h /etc/committer || cp -av /etc/committer/committer.conf /tmp/committer.conf
+    ! test -h /etc/committer || cp -av /etc/committer/committer.conf /tmp/committer.conf
   "
   cmd_postinst: "#!/bin/bash\n
-  test -h /usr/bin/committer ||
-  ln -s /usr/share/committer/committer.py /usr/bin/committer \n
-  test -h /etc/committer  || ln -s /usr/share/committer/etc/committer /etc/committer \n
-  ! test -f /tmp/committer.conf ||cp -av /tmp/committer.conf /etc/committer/committer.conf \n
+    test -h /usr/bin/committer ||
+    ln -s /usr/share/committer/committer.py /usr/bin/committer \n
+    test -h /etc/committer  || ln -s /usr/share/committer/etc/committer /etc/committer \n
+    ! test -f /tmp/committer.conf ||cp -av /tmp/committer.conf /etc/committer/committer.conf \n
   "
 
-Empacotamento:
-  stage: empacotamento
+Empacotamento de teste:
+  stage: testing-package
+
+  variables:
+    version: 0.0.0-0
+    repo_path: /srv/repo/testing
 
   script:
-    - echo "Criando pasta DEBIAN"
-    - ssh $ssh_user@$server "! test -d /tmp/$package/DEBIAN || rm -rf /tmp/$package"
-    - mkdir /tmp/"$package"
-    - mkdir /tmp/"$package"/DEBIAN
+    - *package-default
 
-    - echo "Adicionando parametros essenciais ao arquivo control"
-    - echo "Section:$section" >> /tmp/"$package"/DEBIAN/control
-    - echo "Package:$package" >> /tmp/"$package"/DEBIAN/control
-    - echo "Priority:$priority" >> /tmp/"$package"/DEBIAN/control
-    - echo "Version:$version" >> /tmp/"$package"/DEBIAN/control
-    - echo "Architecture:$architecture" >> /tmp/"$package"/DEBIAN/control
-    - echo "Maintainer:$maintainer" >> /tmp/"$package"/DEBIAN/control
-    - echo "Depends:$depends" >> /tmp/"$package"/DEBIAN/control
-    - echo "Description:$description" >> /tmp/"$package"/DEBIAN/control
-    - echo  >> /tmp/"$package"/DEBIAN/control
-    
-    - echo "Adicionado comandos ao arquivo preinst"
-    - echo "$cmd_preinst" >> /tmp/"$package"/DEBIAN/preinst
-    
-    - echo "Adicionado comandos essenciais ao arquivos postinst"
-    - echo "$cmd_postinst" >> /tmp/"$package"/DEBIAN/postinst
-    
-    - echo "Dando permissão de execução aos arquivos dentro da pasta DEBIAN"
-    - chmod +x /tmp/"$package"/DEBIAN/*
-   
-    
-    - echo "Criando pasta e transferindo arquivos do repositório"
-    - mkdir -p /tmp/"$package"/usr/share/$package
-    - cp -av * /tmp/"$package"/usr/share/$package
-    
-    - echo "Deixando o usuário root como dono dos arquivos"
-    - ssh $ssh_user@$server "chown -R root.root /tmp/$package"
+  rules:
+    - if: $CI_COMMIT_BRANCH == 'main'
 
-    - echo "Efetuando o empacotamento"
-    - ssh $ssh_user@$server "dpkg -b /tmp/$package /tmp"
-    
-    - echo "Enviando o arquivo empacotado para o repositório"
-    - ssh $ssh_user@$server "reprepro -b $repo_path/$distro includedeb $release /tmp/'$package'_'$version'_'$architecture'.deb"
 
-    - echo "Limpando arquivos"
-    - ssh $ssh_user@$server "test -d /tmp/$package/DEBIAN && rm -rf /tmp/$package*" 
+Empacotamento de versão:
+  stage: release-package
+
+  variables:
+    version: $CI_COMMIT_TAG
+    repo_path: /srv/repo/packages
+
+  script:
+    - *package-default
     
- 
   rules:
     - if: $CI_COMMIT_TAG
