@@ -12,8 +12,8 @@
   - ssh "$ssh_user"@"$server" "echo Architecture:$architecture >> /tmp/$package/DEBIAN/control"
   - ssh "$ssh_user"@"$server" "echo Maintainer:$maintainer >> /tmp/$package/DEBIAN/control"
   - ssh "$ssh_user"@"$server" "echo Depends:$depends >> /tmp/$package/DEBIAN/control"
-  - ssh "$ssh_user"@"$server" "echo Description:$description >> /tmp/$package/DEBIAN/control"
-  - ssh "$ssh_user"@"$server" "echo  >> /tmp/$package/DEBIAN/control"
+  - ssh "$ssh_user"@"$server" "echo Description:$description >> /tmp/$package/DEBIAN/control\n"
+#  - ssh "$ssh_user"@"$server" "echo  >> /tmp/$package/DEBIAN/control"
   
   - echo "Adicionado comandos ao arquivo preinst"
   - ssh "$ssh_user"@"$server" "echo $cmd_preinst >> /tmp/$package/DEBIAN/preinst"
