@@ -15,10 +15,10 @@
   - ssh "$ssh_user"@"$server" "echo Description:$description >> /tmp/$package/DEBIAN/control"
   
   - echo "Adicionado comandos ao arquivo preinst"
-  - echo 
+  - ssh "$ssh_user"@"$server" "echo $cmd_preinst >> /tmp/$package/DEBIAN/preinst"
   
-  #- echo "Adicionado comandos essenciais ao arquivos postinst"
-  #- ssh "$ssh_user"@"$server" "echo $cmd_postinst >> /tmp/$package/DEBIAN/postinst"
+  - echo "Adicionado comandos essenciais ao arquivos postinst"
+  - ssh "$ssh_user"@"$server" "echo $cmd_postinst >> /tmp/$package/DEBIAN/postinst"
   
   - echo "Dando permissão de execução aos arquivos dentro da pasta DEBIAN"
   - ssh "$ssh_user"@"$server" "chmod +x /tmp/$package/DEBIAN/*"
@@ -70,7 +70,7 @@ Empacotamento de teste:
   stage: testing-package
 
   variables:
-    version: 0.0.0-6
+    version: 0.0.0-7
     repo_path: /srv/repo/testing
 
   script:
