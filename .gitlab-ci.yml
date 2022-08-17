@@ -56,21 +56,21 @@ variables:
   maintainer: 'Hanokh Software Labs'
   depends: 'git, certbot' 
   description: 'Acessa pastas configuradas e faz commit das mudanças automaticamente'
-  cmd_preinst: '"#!/bin/bash\`\n\`
-    test ! -h /etc/committer || cp -av /etc/committer/committer.conf /tmp/committer.conf\`\n\`
-  "'
-  cmd_postinst: '"#!/bin/bash\`\n\`
+  cmd_preinst: '#!/bin/bash\n 
+    test ! -h /etc/committer || cp -av /etc/committer/committer.conf /tmp/committer.conf\n
+  '
+  cmd_postinst: '"#!/bin/bash
     test -h /usr/bin/committer ||
-    ln -s /usr/share/committer/committer.py /usr/bin/committer \`\n\`
-    test -h /etc/committer  || ln -s /usr/share/committer/etc/committer /etc/committer \`\n\`
-    test ! -f /tmp/committer.conf ||cp -av /tmp/committer.conf /etc/committer/committer.conf \`\n\`
+    ln -s /usr/share/committer/committer.py /usr/bin/committer
+    test -h /etc/committer  || ln -s /usr/share/committer/etc/committer /etc/committer
+    test ! -f /tmp/committer.conf ||cp -av /tmp/committer.conf /etc/committer/committer.conf
   "'
 
 Empacotamento de teste:
   stage: testing-package
 
   variables:
-    version: 0.0.0-9
+    version: 0.0.0-10
     repo_path: /srv/repo/testing
 
   script:
