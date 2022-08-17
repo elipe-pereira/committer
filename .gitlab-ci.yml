@@ -14,11 +14,19 @@
   - ssh "$ssh_user"@"$server" "echo Depends:$depends >> /tmp/$package/DEBIAN/control"
   - ssh "$ssh_user"@"$server" "echo Description:$description >> /tmp/$package/DEBIAN/control"
   
-  - echo "Adicionado comandos ao arquivo preinst"
-  - ssh "$ssh_user"@"$server" 'echo "$cmd_preinst" >> /tmp/$package/DEBIAN/preinst'
+  - echo "criando o arquivo preinst localmente"
+  - echo $cmd_preinst >> /tmp/preinst
   
-  - echo "Adicionado comandos essenciais ao arquivos postinst"
-  - ssh "$ssh_user"@"$server" "echo $cmd_postinst >> /tmp/$package/DEBIAN/postinst"
+  - echo "criando o arquivo postinst localmente"
+  - echo $cmd_postinst >> /tmp/postinst
+
+  - echo "Copiando os arquivos onde será empacotado"
+  - scp /tmp/preinst "$ssh_user"@"$server":/tmp/"$package"/DEBIAN
+  - scp /tmp/postinst "$ssh_user"@"$server":/tmp/"$package"/DEBIAN
+
+  - echo "Apagando arquivos locais"
+  - rm /tmp/preinst
+  - rm /tmp/postinst
   
   - echo "Dando permissão de execução aos arquivos dentro da pasta DEBIAN"
   - ssh "$ssh_user"@"$server" "chmod +x /tmp/$package/DEBIAN/*"
@@ -70,7 +78,7 @@ Empacotamento de teste:
   stage: testing-package
 
   variables:
-    version: 0.0.0-11
+    version: 0.0.0-12
     repo_path: /srv/repo/testing
 
   script:
