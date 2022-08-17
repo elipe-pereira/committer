@@ -15,7 +15,7 @@
   - ssh "$ssh_user"@"$server" "echo Description:$description >> /tmp/$package/DEBIAN/control"
   
   - echo "Adicionado comandos ao arquivo preinst"
-  - ssh "$ssh_user"@"$server" "echo '#!/bin/bash' >> /tmp/$package/DEBIAN/preinst"
+  - ssh "$ssh_user"@"$server" "echo '#\!/bin/bash' >> /tmp/$package/DEBIAN/preinst"
   - ssh "$ssh_user"@"$server" "echo $cmd_preinst >> /tmp/$package/DEBIAN/preinst"
   
   - echo "Adicionado comandos essenciais ao arquivos postinst"
