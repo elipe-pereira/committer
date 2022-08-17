@@ -38,7 +38,7 @@
   - ssh "$ssh_user"@"$server" "reprepro -b $repo_path/$distro includedeb $release /tmp/'$package'_'$version'_'$architecture'.deb"
 
   - echo "Limpando arquivos"
-  - ssh "$ssh_user"@"$server" "test -d /tmp/$package/DEBIAN && rm -rf /tmp/$package*" 
+  #- ssh "$ssh_user"@"$server" "test -d /tmp/$package/DEBIAN && rm -rf /tmp/$package*" 
 
 stages:
   - testing-package
@@ -60,17 +60,17 @@ variables:
   test ! -h /etc/committer || cp -av /etc/committer/committer.conf /tmp/committer.conf\n
   "
   cmd_postinst: "#!/bin/bash\n
-    test -h /usr/bin/committer ||
-    ln -s /usr/share/committer/committer.py /usr/bin/committer \n
-    test -h /etc/committer  || ln -s /usr/share/committer/etc/committer /etc/committer \n
-    ! test -f /tmp/committer.conf ||cp -av /tmp/committer.conf /etc/committer/committer.conf \n
+  test -h /usr/bin/committer ||
+  ln -s /usr/share/committer/committer.py /usr/bin/committer \n
+  test -h /etc/committer  || ln -s /usr/share/committer/etc/committer /etc/committer \n
+  test ! -f /tmp/committer.conf ||cp -av /tmp/committer.conf /etc/committer/committer.conf \n
   "
 
 Empacotamento de teste:
   stage: testing-package
 
   variables:
-    version: 0.0.0-1
+    version: 0.0.0-2
     repo_path: /srv/repo/testing
 
   script:
