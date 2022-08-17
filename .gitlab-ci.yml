@@ -15,10 +15,10 @@
   - ssh "$ssh_user"@"$server" "echo Description:$description >> /tmp/$package/DEBIAN/control"
   
   - echo "criando o arquivo preinst localmente"
-  - echo $cmd_preinst >> /tmp/preinst
+  - echo "$cmd_preinst" >> /tmp/preinst
   
   - echo "criando o arquivo postinst localmente"
-  - echo $cmd_postinst >> /tmp/postinst
+  - echo "$cmd_postinst" >> /tmp/postinst
 
   - echo "Copiando os arquivos onde será empacotado"
   - scp /tmp/preinst "$ssh_user"@"$server":/tmp/"$package"/DEBIAN
@@ -64,21 +64,21 @@ variables:
   maintainer: 'Hanokh Software Labs'
   depends: 'git, certbot' 
   description: 'Acessa pastas configuradas e faz commit das mudanças automaticamente'
-  cmd_preinst: "#!/bin/bash\n 
-    test ! -h /etc/committer || cp -av /etc/committer/committer.conf /tmp/committer.conf\n
+  cmd_preinst: "#!/bin/bash \n 
+    test ! -h /etc/committer || cp -av /etc/committer/committer.conf /tmp/committer.conf \n
   "
-  cmd_postinst: '"#!/bin/bash
+  cmd_postinst: "#!/bin/bash \n
     test -h /usr/bin/committer ||
-    ln -s /usr/share/committer/committer.py /usr/bin/committer
-    test -h /etc/committer  || ln -s /usr/share/committer/etc/committer /etc/committer
-    test ! -f /tmp/committer.conf ||cp -av /tmp/committer.conf /etc/committer/committer.conf
-  "'
+    ln -s /usr/share/committer/committer.py /usr/bin/committer \n 
+    test -h /etc/committer  || ln -s /usr/share/committer/etc/committer /etc/committer \n 
+    test ! -f /tmp/committer.conf ||cp -av /tmp/committer.conf /etc/committer/committer.conf \n
+  "
 
 Empacotamento de teste:
   stage: testing-package
 
   variables:
-    version: 0.0.0-12
+    version: 0.0.0-13
     repo_path: /srv/repo/testing
 
   script:
