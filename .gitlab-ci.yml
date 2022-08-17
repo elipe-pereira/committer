@@ -14,8 +14,8 @@
   - ssh "$ssh_user"@"$server" "echo Depends:$depends >> /tmp/$package/DEBIAN/control"
   - ssh "$ssh_user"@"$server" "echo Description:$description >> /tmp/$package/DEBIAN/control"
   
-  #- echo "Adicionado comandos ao arquivo preinst"
-  #- ssh "$ssh_user"@"$server" "echo >> /tmp/$package/DEBIAN/preinst"
+  - echo "Adicionado comandos ao arquivo preinst"
+  - echo 
   
   #- echo "Adicionado comandos essenciais ao arquivos postinst"
   #- ssh "$ssh_user"@"$server" "echo $cmd_postinst >> /tmp/$package/DEBIAN/postinst"
@@ -53,18 +53,18 @@ variables:
   package: committer
   priority: optional
   architecture: all
-  maintainer: "Hanokh Software Labs"
-  depends: "git, certbot"
-  description: "Acessa pastas configuradas e faz commit das mudanças automaticamente"
-  cmd_preinst: "#!/bin/bash
+  maintainer: 'Hanokh Software Labs'
+  depends: 'git, certbot' 
+  description: 'Acessa pastas configuradas e faz commit das mudanças automaticamente'
+  cmd_preinst: '"#!/bin/bash\n
     test ! -h /etc/committer || cp -av /etc/committer/committer.conf /tmp/committer.conf\n
-  "
-  cmd_postinst: "#!/bin/bash
+  "'
+  cmd_postinst: '"#!/bin/bash\n
     test -h /usr/bin/committer ||
     ln -s /usr/share/committer/committer.py /usr/bin/committer \n
     test -h /etc/committer  || ln -s /usr/share/committer/etc/committer /etc/committer \n
     test ! -f /tmp/committer.conf ||cp -av /tmp/committer.conf /etc/committer/committer.conf \n
-  "
+  "'
 
 Empacotamento de teste:
   stage: testing-package
