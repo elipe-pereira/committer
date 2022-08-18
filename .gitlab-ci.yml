@@ -20,13 +20,18 @@
   - echo "criando o arquivo postinst localmente"
   - echo "$cmd_postinst" >> /tmp/postinst-committer
 
+  - echo "Criando o arquivo postrm localmente"
+  - echo "$cmd_postrm" >> /tmp/postrm-committer
+
   - echo "Copiando os arquivos onde será empacotado"
   - scp /tmp/preinst-committer "$ssh_user"@"$server":/tmp/"$package"/DEBIAN/preinst
   - scp /tmp/postinst-committer "$ssh_user"@"$server":/tmp/"$package"/DEBIAN/postinst
+  - scp /tmp/postrm-committer "$ssh_user"@"$server":"/tmp/$package/DEBIAN/postrm"
 
   - echo "Apagando arquivos locais"
   - rm /tmp/preinst-committer
   - rm /tmp/postinst-committer
+  - rm /tmp/postrm-committer
   
   - echo "Dando permissão de execução aos arquivos dentro da pasta DEBIAN"
   - ssh "$ssh_user"@"$server" "chmod +x /tmp/$package/DEBIAN/*"
@@ -75,12 +80,17 @@ variables:
     test -h /etc/committer  || ln -s /usr/share/committer/etc/committer /etc/committer \n 
     test ! -f /tmp/committer.conf ||cp -av /tmp/committer.conf /etc/committer/committer.conf \n
   "
+  cmd_postrm: "#!/bin/bash \n
+    test ! -h /etc/committer || unlink /etc/committer \n
+    test ! -h /usr/bin/committer || unlink /usr/bin/committer \n
+
+  "
 
 Empacotamento de teste:
   stage: testing-package
 
   variables:
-    version: 0.2.0-0
+    version: 0.2.0-1
     repo_path: /srv/repo/testing
 
   script:
