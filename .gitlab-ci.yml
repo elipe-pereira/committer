@@ -83,6 +83,7 @@ variables:
   cmd_postrm: "#!/bin/bash \n
     test ! -h /etc/committer || unlink /etc/committer \n
     test ! -h /usr/bin/committer || unlink /usr/bin/committer \n
+    test ! -f /tmp/committer.conf || rm /tmp/committer.conf \n
 
   "
 
@@ -90,7 +91,7 @@ Empacotamento de teste:
   stage: testing-package
 
   variables:
-    version: 0.2.0-1
+    version: 0.2.0-2
     repo_path: /srv/repo/testing
 
   script:
