@@ -22,11 +22,12 @@ def main():
         for section in sections:
             title = config.get(section, 'title')
             path = config.get(section, 'path')
+            remote = config.get(section, 'remote')
             branch = config.get(section, 'branch')
             os.chdir(path)
-            os.system("git pull")
+            os.system("git pull {0} {1}".format(remote, branch))
             os.system("git add .")
             os.system("git commit -m '{0}'".format(title))
-            os.system("git push origin {0}".format(branch))
+            os.system("git push {0} {1}".format(remote, branch))
         
 main()
