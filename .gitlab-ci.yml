@@ -78,7 +78,7 @@ Empacotamento de teste:
   stage: testing-package
 
   variables:
-    version: 0.0.0-`date +'%s'`
+    version: 0.0.0-15
     repo_path: /srv/repo/testing
 
   script:
