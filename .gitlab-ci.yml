@@ -61,7 +61,7 @@ stages:
 
 variables: 
   ssh_user: root
-  server: patolino
+  server: valentino
   distro: debian
   release: hanokh
   section: Misc
