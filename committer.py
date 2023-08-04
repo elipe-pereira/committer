@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+# coding: utf-8
 # Committer - Faz o commit das pastas configuradas
 
 import os
@@ -29,5 +30,7 @@ def main():
             os.system("git add .")
             os.system("git commit -m '{0}'".format(title))
             os.system("git push {0} {1}".format(remote, branch))
-        
-main()
+            
+                   
+if __name__ == "__main__":
+    main()
