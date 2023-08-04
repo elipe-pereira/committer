@@ -3,10 +3,9 @@
 # Committer - Faz o commit das pastas configuradas
 
 import os
-import sys
 import configparser
 
-config_dir = os.path.dirname(os.path.realpath(sys.argv[0]))
+config_dir = os.path.dirname(os.path.realpath(__file__))
 title = ""
 path = ""
 
