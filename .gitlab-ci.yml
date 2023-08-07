@@ -36,12 +36,21 @@
   - echo "Dando permissão de execução aos arquivos dentro da pasta DEBIAN"
   - ssh "$ssh_access" "chmod +x /tmp/$package/DEBIAN/*"
  
+  - echo "Criando pasta temporária"
+  - ssh "$ssh_access" "mkdir /tmp/committer-tmp"
+  
+  - echo "Copiando arquivos para pasta temporária"
+  - rsync -av * "$ssh_access":/tmp/committer-tmp
+  
   - echo "Compilando committer"
-  - bash pyinstaller.sh
-
+  - ssh "$ssh_access" "cd /tmp/committer-tmp && bash pyinstaller.sh"
+  
   - echo "Criando pasta e transferindo arquivos do repositório"
   - ssh "$ssh_user"@"$server" "mkdir -p /tmp/$package/usr/share"
-  - rsync -av --no-o --no-g committer "$ssh_access":/tmp/"$package"/usr/share"
+  - rsync -av --no-o --no-g "$ssh_access":/tmp/committer-tmp/committer  /tmp/"$package"/usr/share
+  
+  - echo "Apagando pasta temporária"
+  - ssh "$ssh_access" "! test -d /tmp/committer-tmp || rm -rf /tmp/committer-tmp"
   
   - echo "Deixando o usuário root como dono dos arquivos"
   - ssh $ssh_user@$server "chown -R root.root /tmp/$package"
@@ -69,8 +78,8 @@ variables:
   package: committer
   priority: optional
   architecture: all
-  maintainer: 'Hanokh Software Labs'
-  depends: 'git, certbot' 
+  maintainer: "Hanokh Software Labs"
+  depends: "git,certbot"
   description: 'Acessa pastas configuradas e faz commit das mudanças automaticamente'
   cmd_preinst: "#!/bin/bash \n 
     test ! -h /etc/committer || cp -av /etc/committer/committer.conf /tmp/committer.conf \n
