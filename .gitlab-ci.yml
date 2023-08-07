@@ -1,18 +1,18 @@
 .package-default: &package-default
   - echo "Criando pasta DEBIAN"
-  - ssh "$ssh_user"@"$server" "! test -d /tmp/$package/DEBIAN || rm -rf /tmp/$package"
-  - ssh "$ssh_user"@"$server" "mkdir /tmp/$package"
-  - ssh "$ssh_user"@"$server" "mkdir /tmp/$package/DEBIAN"
+  - ssh "$ssh_access" "! test -d /tmp/$package/DEBIAN || rm -rf /tmp/$package"
+  - ssh "$ssh_access" "mkdir /tmp/$package"
+  - ssh "$ssh_access" "mkdir /tmp/$package/DEBIAN"
 
   - echo "Adicionando parametros essenciais ao arquivo control"
-  - ssh "$ssh_user"@"$server" "echo Section:$section >> /tmp/$package/DEBIAN/control"
-  - ssh "$ssh_user"@"$server" "echo Package:$package >> /tmp/$package/DEBIAN/control"
-  - ssh "$ssh_user"@"$server" "echo Priority:$priority >> /tmp/$package/DEBIAN/control"
-  - ssh "$ssh_user"@"$server" "echo Version:$version >> /tmp/$package/DEBIAN/control"
-  - ssh "$ssh_user"@"$server" "echo Architecture:$architecture >> /tmp/$package/DEBIAN/control"
-  - ssh "$ssh_user"@"$server" "echo Maintainer:$maintainer >> /tmp/$package/DEBIAN/control"
-  - ssh "$ssh_user"@"$server" "echo Depends:$depends >> /tmp/$package/DEBIAN/control"
-  - ssh "$ssh_user"@"$server" "echo Description:$description >> /tmp/$package/DEBIAN/control"
+  - ssh "$ssh_access" "echo Section:$section >> /tmp/$package/DEBIAN/control"
+  - ssh "$ssh_access" "echo Package:$package >> /tmp/$package/DEBIAN/control"
+  - ssh "$ssh_access" "echo Priority:$priority >> /tmp/$package/DEBIAN/control"
+  - ssh "$ssh_access" "echo Version:$version >> /tmp/$package/DEBIAN/control"
+  - ssh "$ssh_access" "echo Architecture:$architecture >> /tmp/$package/DEBIAN/control"
+  - ssh "$ssh_access" "echo Maintainer:$maintainer >> /tmp/$package/DEBIAN/control"
+  - ssh "$ssh_access" "echo Depends:$depends >> /tmp/$package/DEBIAN/control"
+  - ssh "$ssh_access" "echo Description:$description >> /tmp/$package/DEBIAN/control"
   
   - echo "criando o arquivo preinst localmente"
   - echo "$cmd_preinst" >> /tmp/preinst-committer
@@ -24,9 +24,9 @@
   - echo "$cmd_postrm" >> /tmp/postrm-committer
 
   - echo "Copiando os arquivos onde será empacotado"
-  - scp /tmp/preinst-committer "$ssh_user"@"$server":/tmp/"$package"/DEBIAN/preinst
-  - scp /tmp/postinst-committer "$ssh_user"@"$server":/tmp/"$package"/DEBIAN/postinst
-  - scp /tmp/postrm-committer "$ssh_user"@"$server":"/tmp/$package/DEBIAN/postrm"
+  - scp /tmp/preinst-committer "$ssh_access":/tmp/"$package"/DEBIAN/preinst
+  - scp /tmp/postinst-committer "$ssh_access":/tmp/"$package"/DEBIAN/postinst
+  - scp /tmp/postrm-committer "$ssh_access":"/tmp/$package/DEBIAN/postrm"
 
   - echo "Apagando arquivos locais"
   - rm /tmp/preinst-committer
@@ -34,14 +34,14 @@
   - rm /tmp/postrm-committer
   
   - echo "Dando permissão de execução aos arquivos dentro da pasta DEBIAN"
-  - ssh "$ssh_user"@"$server" "chmod +x /tmp/$package/DEBIAN/*"
+  - ssh "$ssh_access" "chmod +x /tmp/$package/DEBIAN/*"
  
-  - echo "Dando permssão de execução ao arquivo committer.py"
-  - chmod +x committer.py
+  - echo "Compilando committer"
+  - bash pyinstaller.sh
 
   - echo "Criando pasta e transferindo arquivos do repositório"
-  - ssh "$ssh_user"@"$server" "mkdir -p /tmp/$package/usr/share/$package"
-  - rsync -av --no-o --no-g * "$ssh_user"@"$server":/tmp/"$package"/usr/share/"$package"
+  - ssh "$ssh_user"@"$server" "mkdir -p /tmp/$package/usr/share"
+  - rsync -av --no-o --no-g committer "$ssh_access":/tmp/"$package"/usr/share"
   
   - echo "Deixando o usuário root como dono dos arquivos"
   - ssh $ssh_user@$server "chown -R root.root /tmp/$package"
@@ -62,6 +62,7 @@ stages:
 variables: 
   ssh_user: root
   server: valentino
+  ssh_access: "$ssh_user@$server"
   distro: debian
   release: hanokh
   section: Misc
@@ -76,7 +77,7 @@ variables:
   "
   cmd_postinst: "#!/bin/bash \n
     test -h /usr/bin/committer ||
-    ln -s /usr/share/committer/committer.py /usr/bin/committer \n 
+    ln -s /usr/share/committer/committer /usr/bin/committer \n 
     test -h /etc/committer  || ln -s /usr/share/committer/etc/committer /etc/committer \n 
     test ! -f /tmp/committer.conf ||cp -av /tmp/committer.conf /etc/committer/committer.conf \n
   "
@@ -90,7 +91,7 @@ Empacotamento de teste:
   stage: testing-package
 
   variables:
-    version: 0.2.0-4
+    version: 0.2.0-5
     repo_path: /srv/repo/testing
 
   script:
