@@ -43,14 +43,15 @@
   - rsync -av * "$ssh_access":/tmp/committer-tmp
   
   - echo "Compilando committer"
-  - ssh "$ssh_access" "cd /tmp/committer-tmp && bash pyinstaller.sh"
+  - ssh "$ssh_access" "cd /tmp/committer-tmp && chmod +x pyinstaller.sh"
+  - ssh "$ssh_access" "cd /tmp/committer-tmp && ./pyinstaller.sh"
   
   - echo "Criando pasta e transferindo arquivos do repositório"
   - ssh "$ssh_user"@"$server" "mkdir -p /tmp/$package/usr/share"
-  - rsync -av --no-o --no-g "$ssh_access":/tmp/committer-tmp/committer  /tmp/"$package"/usr/share
+  - ssh "$ssh_access" "cp -av /tmp/committer-tmp/committer /tmp/$package/usr/share"
   
   - echo "Apagando pasta temporária"
-  - ssh "$ssh_access" "! test -d /tmp/committer-tmp || rm -rf /tmp/committer-tmp"
+  - ssh "$ssh_access" "test -d /tmp/committer-tmp && rm -rf /tmp/committer-tmp"
   
   - echo "Deixando o usuário root como dono dos arquivos"
   - ssh $ssh_user@$server "chown -R root.root /tmp/$package"
@@ -100,7 +101,7 @@ Empacotamento de teste:
   stage: testing-package
 
   variables:
-    version: 0.2.0-5
+    version: 0.2.0-6
     repo_path: /srv/repo/testing
 
   script:
