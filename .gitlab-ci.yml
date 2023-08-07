@@ -1,8 +1,7 @@
 .package-default: &package-default
   - echo "Criando pasta DEBIAN"
   - ssh "$ssh_access" "! test -d /tmp/$package/DEBIAN || rm -rf /tmp/$package"
-  - ssh "$ssh_access" "mkdir /tmp/$package"
-  - ssh "$ssh_access" "mkdir /tmp/$package/DEBIAN"
+  - ssh "$ssh_access" "mkdir -p /tmp/$package/DEBIAN"
 
   - echo "Adicionando parametros essenciais ao arquivo control"
   - ssh "$ssh_access" "echo Section:$section >> /tmp/$package/DEBIAN/control"
@@ -54,16 +53,16 @@
   - ssh "$ssh_access" "test -d /tmp/committer-tmp && rm -rf /tmp/committer-tmp"
   
   - echo "Deixando o usuário root como dono dos arquivos"
-  - ssh $ssh_user@$server "chown -R root.root /tmp/$package"
+  - ssh "$ssh_access" "chown -R root.root /tmp/$package"
 
   - echo "Efetuando o empacotamento"
-  - ssh "$ssh_user"@"$server" "dpkg -b /tmp/$package /tmp"
+  - ssh "$ssh_access" "dpkg -b /tmp/$package /tmp"
   
   - echo "Enviando o arquivo empacotado para o repositório"
-  - ssh "$ssh_user"@"$server" "reprepro -b $repo_path/$distro includedeb $release /tmp/'$package'_'$version'_'$architecture'.deb"
+  - ssh "$ssh_access" "reprepro -b $repo_path/$distro includedeb $release /tmp/'$package'_'$version'_'$architecture'.deb"
 
   - echo "Limpando arquivos"
-  - ssh "$ssh_user"@"$server" "test -d /tmp/$package/DEBIAN && rm -rf /tmp/$package*" 
+  - ssh "$ssh_access" "test -d /tmp/$package/DEBIAN && rm -rf /tmp/$package*" 
 
 stages:
   - testing-package
@@ -101,7 +100,7 @@ Empacotamento de teste:
   stage: testing-package
 
   variables:
-    version: 0.2.0-6
+    version: 0.2.0-7
     repo_path: /srv/repo/testing
 
   script:
