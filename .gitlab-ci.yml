@@ -1,6 +1,6 @@
 .package-default: &package-default
   - echo "Criando pasta DEBIAN"
-  - ssh "$ssh_access" "! test -d /tmp/$package/DEBIAN || rm -rf /tmp/$package"
+  - ssh "$ssh_access" "! test -d /tmp/$package/DEBIAN || rm -rf /tmp/$package*"
   - ssh "$ssh_access" "mkdir -p /tmp/$package/DEBIAN"
 
   - echo "Adicionando parametros essenciais ao arquivo control"
@@ -100,7 +100,7 @@ Empacotamento de teste:
   stage: testing-package
 
   variables:
-    version: 0.3.0-1
+    version: 0.3.0-2
     repo_path: /srv/repo/testing
 
   script:
