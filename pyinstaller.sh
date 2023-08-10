@@ -10,7 +10,7 @@ name="committer"
 mkdir -p $spec_path
 
 pyinstaller --distpath $dist_path \
-        --add-data "$base_dir/etc:etc" \
+        --add-data "$base_dir/conf:conf" \
         --workpath $work_path \
         --specpath $spec_path \
         --name $name main.py
