@@ -2,6 +2,12 @@
 ### Committer
 
 #### [Released]
+#### [0.4.1] - 2023-10-11
+##### Fixed
+- Adicionado encoding no configparser, fixando o problemas de acentos
+no arquivo de configuração.
+
+#### [Released]
 #### [0.4.0] - 2023-10-11
 ##### Added
 - Adicionado arquivo cron para execução automática.
