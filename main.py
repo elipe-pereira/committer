@@ -12,7 +12,7 @@ path = ""
 def main():
     config = configparser.ConfigParser()
     config_file = config_dir + "/conf/committer.conf"
-    config.read(config_file)
+    config.read(config_file, "utf-8")
     sections = config.sections()
 
     for section in sections:
