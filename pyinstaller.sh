@@ -11,7 +11,7 @@ mkdir -p $spec_path
 
 pyinstaller --distpath $dist_path \
         --add-data "$base_dir/conf:conf" \
-        --add-data "$base_dir/committer.cron:committer.cron" \
+        --add-data "$base_dir/committer.cron:." \
         --workpath $work_path \
         --specpath $spec_path \
         --name $name main.py

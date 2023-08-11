@@ -101,7 +101,7 @@ Empacotamento de teste:
   stage: testing-package
 
   variables:
-    version: 0.4.0
+    version: 0.4.0-1
     repo_path: /srv/repo/testing
 
   script:
