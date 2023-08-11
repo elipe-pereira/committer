@@ -1,0 +1,3 @@
+# Sincroniza de forma sequencial cada repositório
+
+*/30 * 	* * *	root committer

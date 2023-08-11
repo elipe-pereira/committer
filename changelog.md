@@ -2,6 +2,11 @@
 ### Committer
 
 #### [Released]
+#### [0.4.0] - 2023-10-11
+##### Added
+- Adicionado arquivo cron para execução automática.
+
+#### [Released]
 #### [0.3.0] - 2023-10-10
 ##### Changed
 - Alterando nome de pasta de configuração.

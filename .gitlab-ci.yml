@@ -86,7 +86,8 @@ variables:
   "
   cmd_postinst: "#!/bin/bash \n
     test -h /usr/bin/committer ||
-    ln -s /usr/share/committer/committer /usr/bin/committer \n 
+    ln -s /usr/share/committer/committer /usr/bin/committer \n
+    cp -av /usr/share/committer/committer.cron /etc/cron.d/committer \n 
     test -h /etc/committer  || ln -s /usr/share/committer/conf /etc/committer \n 
     test ! -f /tmp/committer.conf ||cp -av /tmp/committer.conf /etc/committer/committer.conf \n
   "
@@ -100,7 +101,7 @@ Empacotamento de teste:
   stage: testing-package
 
   variables:
-    version: 0.3.0-2
+    version: 0.4.0
     repo_path: /srv/repo/testing
 
   script:
