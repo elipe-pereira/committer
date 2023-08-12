@@ -2,7 +2,7 @@
 ### Committer
 
 #### [Released]
-#### [0.5.0]
+#### [0.5.0] - 2023-10-12
 ##### Changed
 - Ajustado estrutura em conformidade com orientação a objetos.
 
