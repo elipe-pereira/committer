@@ -82,7 +82,8 @@ variables:
   depends: "git,certbot"
   description: 'Acessa pastas configuradas e faz commit das mudanças automaticamente'
   cmd_preinst: "#!/bin/bash \n 
-    ! test -h /etc/committer || cp -av /etc/committer/committer.conf /tmp/committer.conf \n
+    ! test -f /usr/share/committer/conf/committer.conf || 
+    cp -av /usr/share/committer/conf/committer.conf /tmp/committer.conf \n
   "
   cmd_postinst: "#!/bin/bash \n
     test -h /usr/bin/committer ||
@@ -101,7 +102,7 @@ Empacotamento de teste:
   stage: testing-package
 
   variables:
-    version: 0.5.0-2
+    version: 0.5.0-3
     repo_path: /srv/repo/testing
 
   script:
