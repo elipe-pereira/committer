@@ -2,6 +2,11 @@
 ### Committer
 
 #### [Released]
+#### [0.5.0]
+##### Changed
+- Ajustado estrutura em conformidade com orientação a objetos.
+
+#### [Released]
 #### [0.4.1] - 2023-10-11
 ##### Fixed
 - Adicionado encoding no configparser, fixando o problemas de acentos
