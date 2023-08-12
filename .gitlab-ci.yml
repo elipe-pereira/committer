@@ -82,8 +82,7 @@ variables:
   depends: "git,certbot"
   description: 'Acessa pastas configuradas e faz commit das mudanças automaticamente'
   cmd_preinst: "#!/bin/bash \n 
-    test ! -h /etc/committer || cp /etc/committer/committer.conf /tmp/committer.conf \n
-    ! test -f /tmp/committer.conf || cp /tmp/committer.conf /etc/committer/committer.conf \n
+    ! test -h /etc/committer || cp /etc/committer/committer.conf /tmp/committer.conf \n
   "
   cmd_postinst: "#!/bin/bash \n
     test -h /usr/bin/committer ||
@@ -91,19 +90,19 @@ variables:
     cp -av /usr/share/committer/committer.cron /etc/cron.d/committer \n
     chmod 0644 /etc/cron.d/committer \n 
     test -h /etc/committer  || ln -s /usr/share/committer/conf /etc/committer \n 
-    test ! -f /tmp/committer.conf ||cp -av /tmp/committer.conf /etc/committer/committer.conf \n
+    ! test -f /tmp/committer.conf ||cp /tmp/committer.conf /etc/committer/committer.conf \n
   "
   cmd_postrm: "#!/bin/bash \n
-    test ! -h /etc/committer || unlink /etc/committer \n
-    test ! -h /usr/bin/committer || unlink /usr/bin/committer \n
-    test ! -f /tmp/committer.conf || rm /tmp/committer.conf \n
+    ! test -h /etc/committer || unlink /etc/committer \n
+    ! test -h /usr/bin/committer || unlink /usr/bin/committer \n
+    ! test -f /tmp/committer.conf || rm /tmp/committer.conf \n
   "
 
 Empacotamento de teste:
   stage: testing-package
 
   variables:
-    version: 0.5.0
+    version: 0.5.0-1
     repo_path: /srv/repo/testing
 
   script:
