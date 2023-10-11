@@ -1,13 +1,16 @@
 #!/usr/bin/python3
 # coding: utf-8
 
-import os
+from os import chdir
+from os import system
+from os.path import dirname
+from os.path import realpath
 from configparser import ConfigParser
 
 
 class Main:
     def __init__(self):
-        self.config_dir = os.path.dirname(os.path.realpath(__file__))
+        self.config_dir = dirname(realpath(__file__))
         self.title = ""
         self.path = ""
         self.remote = ""
@@ -24,11 +27,11 @@ class Main:
             self.path = config.get(section, 'path')
             self.remote = config.get(section, 'remote')
             self.branch = config.get(section, 'branch')
-            os.chdir(self.path)
-            os.system("git pull {0} {1}".format(self.remote, self.branch))
-            os.system("git add .")
-            os.system("git commit -m '{0}'".format(self.title))
-            os.system("git push {0} {1}".format(self.remote, self.branch))
+            chdir(self.path)
+            system("git pull {0} {1}".format(self.remote, self.branch))
+            system("git add .")
+            system("git commit -m '{0}'".format(self.title))
+            system("git push {0} {1}".format(self.remote, self.branch))
         else:
             if len(sections) == 0:
                 print("Não há seções configuradas!")
