@@ -10,7 +10,8 @@ function build(){
 
     mkdir -p ${dist_path}
 
-    pyinstaller --distpath ${dist_path} \
+    pyinstaller --contents-directory "." \
+        --distpath ${dist_path} \
         --add-data "${basedir}/conf:conf" \
         --add-data "${basedir}/committer.cron:." \
         --workpath "${work_path}" \
