@@ -47,8 +47,19 @@ committer_x.x.x_amd64.deb. Para instalar o arquivo gerado basta executar o coman
 Caso sua intenção seja somente compilar o programa, execute o comando: 
 
     ~# ./installer.sh build
-    
-Ele comando fará somente a compilação do programa e a pasta com o programa compilado
+
+Este comando fará somente a compilação do programa e a pasta com o programa compilado
 será armazenado em /tmp/build/dist/committer. Basta acessar a pasta e executar o programa
 compilado seja para fins de teste, seja para uso geral. 
 
+    ~# ./installer.sh clear
+
+O comando acima apaga a pasta de build (/tmp/build) onde ficam armazenados o código
+compilado e a pasta com os arquivos temporários resultatntes da compilação, além do 
+arquivo .spec gerado e que também pode ser utilizado para compilações futuras caso
+você utilize o pyinstaller diretamente. 
+
+    ~# ./installer.sh help
+
+O comando acima exibe uma mensagem de ajuda, assim como executar o comando installer
+sem nenhum parâmetro também causará a exibição da mesma mensagem de ajuda. 
